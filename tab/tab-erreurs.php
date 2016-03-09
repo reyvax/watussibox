@@ -35,15 +35,11 @@
 */
 
 
-include_once('../inc/config.inc.php');
+include_once('../inc/connect.inc.php');
 include_once('../inc/fonctions.inc.php');
 include_once('../inc/graph.inc.php');
 
 login();
-
-$link = mysql_connect($CONFIG_TAB['host'], $CONFIG_TAB['login_db'], $CONFIG_TAB['password_db']);
-mysql_select_db($CONFIG_TAB['database']);
-
 ?>
 
 
@@ -83,8 +79,8 @@ mysql_select_db($CONFIG_TAB['database']);
 			<tbody>
 				<?php
 					$qry = "SELECT date, url, last_res_code FROM watussi_url, watussi_date WHERE watussi_url.last_crawl = watussi_date.date_id AND last_res_code != 200 AND last_res_code != 304 ORDER BY date DESC LIMIT 1000";
-					$res = mysql_query($qry);
-					while($row = mysql_fetch_object($res)){
+					$res = $dbh->query($qry);
+					while($row = $res->fetch(PDO::FETCH_OBJ)){
 						$date = $row->date;
 						$url = $row->url;
 						$last_res_code = $row->last_res_code;
@@ -99,4 +95,4 @@ mysql_select_db($CONFIG_TAB['database']);
 	</body>
 </html>
 
-<?php mysql_close($link); ?>
+<?php $dbh = null; ?>

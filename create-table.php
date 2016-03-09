@@ -34,13 +34,7 @@
 
 */
 
-include_once('inc/config.inc.php');	
-
-
-$link = mysql_connect($CONFIG_TAB['host'], $CONFIG_TAB['login_db'], $CONFIG_TAB['password_db']);
-mysql_select_db($CONFIG_TAB['database']);
-
-
+  include_once('inc/connect.inc.php'); 
 
 $qry = 
 "CREATE TABLE IF NOT EXISTS `watussi_date` (
@@ -50,7 +44,7 @@ $qry =
   KEY `date` (`date`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;";
 
-mysql_query($qry) or die(mysql_error);
+$dbh->query($qry) or die($dbh->errorInfo());
 
 
 $qry =
@@ -64,7 +58,7 @@ $qry =
   KEY `keyword_md5` (`keyword_md5`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;";
 
-mysql_query($qry) or die(mysql_error);
+$dbh->query($qry) or die($dbh->errorInfo());
 
 $qry =
 "CREATE TABLE IF NOT EXISTS `watussi_kpi` (
@@ -78,7 +72,7 @@ $qry =
   PRIMARY KEY (`kpi_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;";
 
-mysql_query($qry) or die(mysql_error);
+$dbh->query($qry) or die($dbh->errorInfo());
 
 
 $qry=
@@ -97,7 +91,7 @@ $qry=
   KEY `keyword_id` (`keyword_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;";
 
-mysql_query($qry) or die(mysql_error);
+$dbh->query($qry) or die($dbh->errorInfo());
 
 $qry = 
 "CREATE TABLE IF NOT EXISTS `watussi_tmp_active_nonactive` (
@@ -105,7 +99,7 @@ $qry =
   `non_active` int(9) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;";
 
-mysql_query($qry) or die(mysql_error);
+$dbh->query($qry) or die($dbh->errorInfo());
 
 $qry =
 "CREATE TABLE IF NOT EXISTS `watussi_tmp_crawl_utile_inutile` (
@@ -115,7 +109,7 @@ $qry =
   KEY `date_id` (`date_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;";
 
-mysql_query($qry) or die(mysql_error);
+$dbh->query($qry) or die($dbh->errorInfo());
 
 $qry = 
 "CREATE TABLE IF NOT EXISTS `watussi_tmp_evenement_30j` (
@@ -126,7 +120,7 @@ $qry =
   KEY `type_id` (`type_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;";
 
-mysql_query($qry) or die(mysql_error);
+$dbh->query($qry) or die($dbh->errorInfo());
 
 $qry =
 "CREATE TABLE IF NOT EXISTS `watussi_tmp_evenement_global_heure` (
@@ -136,7 +130,7 @@ $qry =
   KEY `type_id` (`type_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;";
 
-mysql_query($qry) or die(mysql_error);
+$dbh->query($qry) or die($dbh->errorInfo());
 
 $qry =
 "CREATE TABLE IF NOT EXISTS `watussi_tmp_evenement_jour` (
@@ -147,7 +141,7 @@ $qry =
   KEY `type_id` (`type_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;";
 
-mysql_query($qry) or die(mysql_error);
+$dbh->query($qry) or die($dbh->errorInfo());
 
 $qry =
 "CREATE TABLE IF NOT EXISTS `watussi_tmp_evenement_res_code` (
@@ -159,7 +153,7 @@ $qry =
   KEY `type_id` (`type_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;";
 
-mysql_query($qry) or die(mysql_error);
+$dbh->query($qry) or die($dbh->errorInfo());
 
 
 $qry =
@@ -171,7 +165,7 @@ $qry =
   KEY `type_id` (`type_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;";
 
-mysql_query($qry) or die(mysql_error);
+$dbh->query($qry) or die($dbh->errorInfo());
 
 $qry =
 "CREATE TABLE IF NOT EXISTS `watussi_tmp_evenement_unique_jour` (
@@ -182,7 +176,7 @@ $qry =
   KEY `type_id` (`type_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;";
 
-mysql_query($qry) or die(mysql_error);
+$dbh->query($qry) or die($dbh->errorInfo());
 
 $qry =
 "CREATE TABLE IF NOT EXISTS `watussi_tmp_nouvelles_pages` (
@@ -191,7 +185,7 @@ $qry =
   KEY `date_id` (`date_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;";
 
-mysql_query($qry) or die(mysql_error);
+$dbh->query($qry) or die($dbh->errorInfo());
 
 $qry =
 "CREATE TABLE IF NOT EXISTS `watussi_tmp_pa_30j` (
@@ -200,7 +194,7 @@ $qry =
   KEY `date_id` (`date_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;";
 
-mysql_query($qry) or die(mysql_error);
+$dbh->query($qry) or die($dbh->errorInfo());
 
 $qry =
 "CREATE TABLE IF NOT EXISTS `watussi_tmp_pa_jour` (
@@ -209,7 +203,7 @@ $qry =
   KEY `date_id` (`date_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;";
 
-mysql_query($qry) or die(mysql_error);
+$dbh->query($qry) or die($dbh->errorInfo());
 
 
 $qry =
@@ -219,7 +213,7 @@ $qry =
   KEY `date_id` (`date_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;";
 
-mysql_query($qry) or die(mysql_error);
+$dbh->query($qry) or die($dbh->errorInfo());
 
 
 $qry =
@@ -228,7 +222,7 @@ $qry =
   `nb` int(9) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;";
 
-mysql_query($qry) or die(mysql_error);
+$dbh->query($qry) or die($dbh->errorInfo());
 
 $qry =
 "CREATE TABLE IF NOT EXISTS `watussi_tmp_response_time` (
@@ -237,7 +231,7 @@ $qry =
   KEY `date_id` (`date_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;";
 
-mysql_query($qry) or die(mysql_error);
+$dbh->query($qry) or die($dbh->errorInfo());
 
 $qry =
 "CREATE TABLE IF NOT EXISTS `watussi_url` (
@@ -256,9 +250,8 @@ $qry =
   KEY `cat_id` (`cat_id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;";
 
-mysql_query($qry) or die(mysql_error);
+$dbh->query($qry) or die($dbh->errorInfo());
 
-
-mysql_close($link);
+$dbh = null;
 
 header('Location: login.php?create=ok');

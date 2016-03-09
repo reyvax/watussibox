@@ -35,35 +35,15 @@
 */
 
 	session_start();
-	include_once('inc/config.inc.php');
+  include_once('inc/connect.inc.php'); 
 	include_once('inc/fonctions.inc.php');
+	 
+  // On vérifie que les tables sont bien installées
+  $qry = "SHOW TABLES FROM " . $CONFIG_TAB['database'] . " LIKE 'watussi_%'";
+  $show = $dbh->prepare($qry);
+  $show->execute();
 
-	$link = mysql_connect($CONFIG_TAB['host'], $CONFIG_TAB['login_db'], $CONFIG_TAB['password_db']);		
-	
-	$db_selected = mysql_select_db($CONFIG_TAB['database']);
-	
-	$login = $mdp = '';
-	$erreur_login = $erreur_table = false;
-	
-	// On vérifie login et mot de passe
-	if(isset($_POST['login']) && isset($_POST['mdp'])){
-		$login = addslashes($_POST['login']);
-		$mdp = addslashes($_POST['mdp']);		
-		if(($CONFIG_TAB['users'][$login] == $mdp)&&($login != '')&&($mdp != '')){
-			$_SESSION['login'] = 'ok';
-			mysql_close($link);
-			header('Location: index.php');
-			exit();
-		}		
-		else{
-			$erreur_login = true;
-		}
-	}
-	
-	// On vérifie que les tables sont bien installées
-	$qry = "SHOW TABLES FROM " . $CONFIG_TAB['database'] . " LIKE 'watussi_%'";
-	$res = mysql_query($qry);
-	$nb = mysql_num_rows($res);
+  $nb = $show->rowCount();
 	if($nb == 0){
 		$erreur_table = true;
 	}
@@ -140,7 +120,7 @@
 			echo "<div class='alert alert-error' align='center'><strong>Oupsss...</strong> Il semble y avoir une erreur de login ou de mot de passe !</div>";
 		}
 		
-		if(!$link){
+		if(!$dbh){
 			echo "<div class='alert alert-error' align='center'><strong>Oupsss...</strong> Il semble y avoir une erreur de configuration de base de données !</div>";
 		}
 		
@@ -169,4 +149,4 @@
   </body>
 </html>
 
-<?php mysql_close($link); ?>
+<?php $dbh = null; ?>
