@@ -1,9 +1,8 @@
-#!/usr/bin/php
 <?php
 
-/* watussi_log.php
- * Première version : 30 novembre 2012
- * Dernière modification : 3 décembre 2012
+/* config.inc.php
+ * Première version : 25 novembre 2012
+ * Dernière modification : 4 décembre 2012
 .---------------------------------------------------------------------------.
 |  Software: WatussiBox Free                                                |
 |   Version: 0.1                                                            |
@@ -35,40 +34,36 @@
 '---------------------------------------------------------------------------'
 
 */
-include_once('inc/connect.inc.php'); 
-include_once('inc/fonctions.inc.php');
+include_once('config.inc.php');	
 
-//error_log("test insert", 1, "contact@amsashop.com");
-$link = mysql_connect($CONFIG_TAB['host'], $CONFIG_TAB['login_db'], $CONFIG_TAB['password_db']);
-mysql_select_db($CONFIG_TAB['database']);
+  	$db_selected = $CONFIG_TAB['database'];
+    $db_host = $CONFIG_TAB['host'];
 
-//error_log("apres insert", 1, "contact@amsashop.com");
+    $dsn = 'mysql:dbname='.$db_selected.';host='.$db_host;
+    $user = $CONFIG_TAB['login_db'];
+    $password = $CONFIG_TAB['password_db'];
 
-$stdin = fopen("php://stdin", "r");
-ob_implicit_flush (true); // Use unbuffered output
-while ($line = fgets ($stdin))
-{
-    $tmp = explode('|||', $line);
-    $adresse_ip = $tmp[0];
-    $referer = $tmp[1];
-    $user_agent = $tmp[2];
-    $dom = $tmp[3];
-    
-    $path = $tmp[4];
-    
-    $tmp2 = explode(" ", $path);
-    $path = $tmp2[1];
-    
-    $url = $dom . $path;
-    
-    $RES_CODE = $tmp[5];
-    $RESPONSE_TIME = $tmp[6];
-    
-    add_log($adresse_ip, $referer, $user_agent, $url, $RES_CODE, $RESPONSE_TIME);
-}
+    try {
+        $dbh = new PDO($dsn, $user, $password);
+    } catch (PDOException $e) {
+        echo 'Connexion échouée : ' . $e->getMessage();
+    }
 
 
-
-
-
-mysql_close($link);
+	
+	$login = $mdp = '';
+	$erreur_login = $erreur_table = false;
+	
+	// On vérifie login et mot de passe
+	if(isset($_POST['login']) && isset($_POST['mdp'])){
+		$login = addslashes($_POST['login']);
+		$mdp = addslashes($_POST['mdp']);		
+		if(($CONFIG_TAB['users'][$login] == $mdp)&&($login != '')&&($mdp != '')){
+			$_SESSION['login'] = 'ok';
+			header('Location: index.php');
+			exit();
+		}		
+		else{
+			$erreur_login = true;
+		}
+	}

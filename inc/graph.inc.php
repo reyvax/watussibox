@@ -36,6 +36,7 @@
 */
 
 function get_pie($div_container, $tab_data, $title='Default'){
+	global $dbh;
 	
 	
 	$data = '';
@@ -89,7 +90,7 @@ function get_pie($div_container, $tab_data, $title='Default'){
         });
     });
     
-});
+	});
 		
 		
 		</script>";
@@ -158,7 +159,7 @@ $(function () {
             }, ]
         });
     });
-    
+
 });
 		</script>";
 		
@@ -245,6 +246,8 @@ return($res);
 
 
 function get_crawl_unique_quotidien($div_container){
+	global $dbh;
+
 	$serie_tab = array();
 	$x_tab = array();
 	
@@ -253,8 +256,8 @@ function get_crawl_unique_quotidien($div_container){
 			AND type_id = 0
 			ORDER BY date;';
 
-	$res = mysql_query($qry);
-	while($row = mysql_fetch_object($res)){
+	$res = $dbh->query($qry);
+	while($row = $res->fetch(PDO::FETCH_OBJ)){
 		$serie_tab[] = intval($row->nb);
 		$x_tab[] = $row->date;
 	}
@@ -264,6 +267,7 @@ function get_crawl_unique_quotidien($div_container){
 }
 
 function get_visites_quotidien($div_container){
+	global $dbh;
 	$serie_tab = array();
 	$x_tab = array();
 	
@@ -272,8 +276,8 @@ function get_visites_quotidien($div_container){
 			AND type_id = 1
 			ORDER BY date;';
 
-	$res = mysql_query($qry);
-	while($row = mysql_fetch_object($res)){
+	$res = $dbh->query($qry);
+	while($row = $res->fetch(PDO::FETCH_OBJ)){
 		$serie_tab[] = intval($row->nb);
 		$x_tab[] = $row->date;
 	}
@@ -283,6 +287,7 @@ function get_visites_quotidien($div_container){
 }
 
 function get_visites_30j($div_container){
+	global $dbh;
 	$serie_tab = array();
 	$x_tab = array();
 	
@@ -291,8 +296,8 @@ function get_visites_30j($div_container){
 			AND type_id = 1
 			ORDER BY date;';
 
-	$res = mysql_query($qry);
-	while($row = mysql_fetch_object($res)){
+	$res = $dbh->query($qry);
+	while($row = $res->fetch(PDO::FETCH_OBJ)){
 		$serie_tab[] = intval($row->nb);
 		$x_tab[] = $row->date;
 	}
@@ -302,6 +307,7 @@ function get_visites_30j($div_container){
 }
 
 function get_pa_jour($div_container){
+	global $dbh;
 	$serie_tab = array();
 	$x_tab = array();
 	
@@ -309,8 +315,8 @@ function get_pa_jour($div_container){
 			WHERE wd.date_id = wt.date_id
 			ORDER BY date;';
 
-	$res = mysql_query($qry);
-	while($row = mysql_fetch_object($res)){
+	$res = $dbh->query($qry);
+	while($row = $res->fetch(PDO::FETCH_OBJ)){
 		$serie_tab[] = intval($row->nb);
 		$x_tab[] = $row->date;
 	}
@@ -320,6 +326,7 @@ function get_pa_jour($div_container){
 }
 
 function get_pa_30j($div_container){
+	global $dbh;
 	$serie_tab = array();
 	$x_tab = array();
 	
@@ -327,8 +334,8 @@ function get_pa_30j($div_container){
 			WHERE wd.date_id = wt.date_id
 			ORDER BY date;';
 
-	$res = mysql_query($qry);
-	while($row = mysql_fetch_object($res)){
+	$res = $dbh->query($qry);
+	while($row = $res->fetch(PDO::FETCH_OBJ)){
 		$serie_tab[] = intval($row->nb);
 		$x_tab[] = $row->date;
 	}
@@ -338,6 +345,7 @@ function get_pa_30j($div_container){
 }
 
 function get_crawl_unique_30j($div_container){
+	global $dbh;
 	$serie_tab = array();
 	$x_tab = array();
 	
@@ -346,8 +354,8 @@ function get_crawl_unique_30j($div_container){
 			AND type_id = 0
 			ORDER BY date;';
 
-	$res = mysql_query($qry);
-	while($row = mysql_fetch_object($res)){
+	$res = $dbh->query($qry);
+	while($row = $res->fetch(PDO::FETCH_OBJ)){
 		$serie_tab[] = intval($row->nb);
 		$x_tab[] = $row->date;
 	}
@@ -357,6 +365,7 @@ function get_crawl_unique_30j($div_container){
 }
 
 function get_nouvelles_pages($div_container){
+	global $dbh;
 	$serie_tab = array();
 	$x_tab = array();
 	
@@ -364,8 +373,8 @@ function get_nouvelles_pages($div_container){
 			WHERE wd.date_id = wt.date_id
 			ORDER BY date;';
 
-	$res = mysql_query($qry);
-	while($row = mysql_fetch_object($res)){
+	$res = $dbh->query($qry);
+	while($row = $res->fetch(PDO::FETCH_OBJ)){
 		$serie_tab[] = intval($row->nb);
 		$x_tab[] = $row->date;
 	}
@@ -375,13 +384,14 @@ function get_nouvelles_pages($div_container){
 }
 
 function get_crawl_global_heure($div_container){
+	global $dbh;
 	$serie_tab = array();
 	$x_tab = array();
 	
 	$qry = 'SELECT heure, nb FROM watussi_tmp_evenement_global_heure WHERE type_id = 0 ORDER BY heure;';
 
-	$res = mysql_query($qry);
-	while($row = mysql_fetch_object($res)){
+	$res = $dbh->query($qry);
+	while($row = $res->fetch(PDO::FETCH_OBJ)){
 		$serie_tab[] = intval($row->nb);
 		$x_tab[] = $row->heure;
 	}
@@ -390,13 +400,14 @@ function get_crawl_global_heure($div_container){
 }
 
 function get_visites_global_heure($div_container){
+	global $dbh;
 	$serie_tab = array();
 	$x_tab = array();
 	
 	$qry = 'SELECT heure, nb FROM watussi_tmp_evenement_global_heure WHERE type_id = 1 ORDER BY heure;';
 
-	$res = mysql_query($qry);
-	while($row = mysql_fetch_object($res)){
+	$res = $dbh->query($qry);
+	while($row = $res->fetch(PDO::FETCH_OBJ)){
 		$serie_tab[] = intval($row->nb);
 		$x_tab[] = $row->heure;
 	}
@@ -405,9 +416,10 @@ function get_visites_global_heure($div_container){
 }
 
 function get_active_nonactive($div_container){
+	global $dbh;
 	$qry = 'SELECT active, non_active FROM watussi_tmp_active_nonactive;';
-	$res = mysql_query($qry);
-	$row = mysql_fetch_object($res);
+	$res = $dbh->query($qry);
+	$row = $res->fetch(PDO::FETCH_OBJ);
 	$active = intval($row->active);
 	$non_active = intval($row->non_active);
 	
@@ -419,11 +431,12 @@ function get_active_nonactive($div_container){
 }
 
 function get_last_res_code($div_container){
+	global $dbh;
 	$qry = 'SELECT res_code, nb FROM watussi_tmp_rescode;';
-	$res = mysql_query($qry);
+	$res = $dbh->query($qry);
 	$tab_data = array();
 	
-	while($row = mysql_fetch_object($res)){
+	while($row = $res->fetch(PDO::FETCH_OBJ)){
 		$res_code = $row->res_code;
 		$nb = intval($row->nb);
 		$tab_data[] = array($res_code, $nb);
@@ -435,28 +448,29 @@ function get_last_res_code($div_container){
 }
 
 function get_crawl_utile_inutile($div_container){
+	global $dbh;
 	$x_tab = array();
 	$series_tab = array();
 	$qry = 'SELECT DISTINCT(wt.date_id), date FROM watussi_tmp_crawl_utile_inutile wt, watussi_date wd
 			WHERE wt.date_id = wd.date_id			
 			ORDER BY date;';
 			
-	$res = mysql_query($qry);
+	$res = $dbh->query($qry);
 	$tab_utile = array();
 	$tab_inutile = array();
-	while($row = mysql_fetch_object($res)){
+	while($row = $res->fetch(PDO::FETCH_OBJ)){
 		$date = $row->date;
 		$date_id = $row->date_id;
 		$x_tab[] = $date;
 		
 		$qry = "SELECT nb FROM watussi_tmp_crawl_utile_inutile WHERE date_id = '$date_id' AND utile = 1;";
-		$res2 = mysql_query($qry);
-		$row2 = mysql_fetch_object($res2);
+		$res2 = $dbh->query($qry);
+		$row2 = $res2->fetch(PDO::FETCH_OBJ);
 		$tab_utile[] = intval($row2->nb);
 		
 		$qry = "SELECT nb FROM watussi_tmp_crawl_utile_inutile WHERE date_id = '$date_id' AND utile = 0;";
-		$res2 = mysql_query($qry);
-		$row2 = mysql_fetch_object($res2);
+		$res2 = $dbh->query($qry);
+		$row2 = $res2->fetch(PDO::FETCH_OBJ);
 		$tab_inutile[] = intval($row2->nb);
 	}
 	
@@ -467,20 +481,20 @@ function get_crawl_utile_inutile($div_container){
 }
 
 function get_evenement_res_code($div_container, $type_id){
-	
+	global $dbh;	
 	// On récupère toutes les dates
 	$qry = "SELECT DISTINCT(date_id) AS date_id FROM watussi_tmp_evenement_res_code WHERE type_id = $type_id";
-	$res = mysql_query($qry);
+	$res = $dbh->query($qry);
 	$dateid_tab = array();
-	while($row = mysql_fetch_object($res)){
+	while($row = $res->fetch(PDO::FETCH_OBJ)){
 		$dateid_tab[] = intval($row->date_id);
 	}
 	
 	// On récupère tous les res code
 	$qry = "SELECT DISTINCT(res_code) AS res_code FROM watussi_tmp_evenement_res_code WHERE type_id = $type_id";
-	$res = mysql_query($qry);
+	$res = $dbh->query($qry);
 	$rescode_tab = array();
-	while($row = mysql_fetch_object($res)){
+	while($row = $res->fetch(PDO::FETCH_OBJ)){
 		$rescode_tab[] = intval($row->res_code);
 	}
 	
@@ -491,8 +505,8 @@ function get_evenement_res_code($div_container, $type_id){
 			WHERE wd.date_id = wt.date_id			
 			GROUP BY wd.date_id
 			ORDER BY date;';
-	$res = mysql_query($qry);
-	while($row = mysql_fetch_object($res)){
+	$res = $dbh->query($qry);
+	while($row = $res->fetch(PDO::FETCH_OBJ)){
 		$date_id = $row->date_id;
 		$date = $row->date;
 		$x_tab[] = $date;
@@ -508,10 +522,10 @@ function get_evenement_res_code($div_container, $type_id){
 					WHERE wt.date_id = '$dateid'
 					AND wt.res_code = '$rescode'
 					AND wt.type_id = $type_id;";
-			$res = mysql_query($qry);
-			$nb = mysql_num_rows($res);
+			$res = $dbh->query($qry);
+			$nb = $res->rowCount();
 			if($nb > 0){
-				$row = mysql_fetch_object($res);
+				$row = $res->fetch(PDO::FETCH_OBJ);
 				$nb = intval($row->nb);				
 			}
 			$series_temp[] = $nb;
@@ -535,15 +549,17 @@ function get_evenement_res_code($div_container, $type_id){
 }
 
 function get_temps_execution($div_container){
+global $dbh;
+
 	$qry = 'SELECT date, response_time FROM watussi_date wd, watussi_tmp_response_time wt
 			WHERE wd.date_id = wt.date_id
 			ORDER BY date;';
 			
-	$res = mysql_query($qry);
+	$res = $dbh->query($qry);
 	
 	$x_tab = array();
 	$series_tab = array();
-	while($row = mysql_fetch_object($res)){
+	while($row = $res->fetch(PDO::FETCH_OBJ)){
 		$x_tab[] = $row->date;
 		$series_tab[] = intval($row->response_time);
 	}
@@ -552,15 +568,17 @@ function get_temps_execution($div_container){
 }
 
 function get_pages_connues($div_container){
+global $dbh;
+
 	$qry = 'SELECT date, nb FROM watussi_date wd, watussi_tmp_ppc wt
 			WHERE wd.date_id = wt.date_id
 			ORDER BY date;';
 			
-	$res = mysql_query($qry);
+	$res = $dbh->query($qry);
 	
 	$x_tab = array();
 	$series_tab = array();
-	while($row = mysql_fetch_object($res)){
+	while($row = $res->fetch(PDO::FETCH_OBJ)){
 		$x_tab[] = $row->date;
 		$series_tab[] = intval($row->nb);
 	}

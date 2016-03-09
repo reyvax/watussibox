@@ -84,12 +84,8 @@ login();
 	
 
 <?php
-	include_once('inc/config.inc.php');	
+	include_once('inc/connect.inc.php');	
 	include_once('inc/graph.inc.php');
-
-
-	$link = mysql_connect($CONFIG_TAB['host'], $CONFIG_TAB['login_db'], $CONFIG_TAB['password_db']);
-	mysql_select_db($CONFIG_TAB['database']);
 
 ?>
 
@@ -128,8 +124,8 @@ login();
 		<?php
 			// On vérifie que la table log n'est pas vide
 			$qry = 'SELECT COUNT(*) AS nb FROM watussi_log;';
-			$res = mysql_query($qry);
-			$row = mysql_fetch_object($res);
+			$res = $dbh->query($qry);
+			$row = $res->fetch(PDO::FETCH_OBJ);
 			$nb = $row->nb;
 			if($nb == 0){
 		?>
@@ -146,8 +142,8 @@ login();
 			
 			// On regarde si il y a déjà eu une analyse
 			$qry = 'SELECT COUNT(*) AS nb FROM watussi_kpi;';
-			$res = mysql_query($qry);
-			$row = mysql_fetch_object($res);
+			$res = $dbh->query($qry);
+			$row = $res->fetch(PDO::FETCH_OBJ);
 			$nb = $row->nb;
 			if($nb == 0){
 		?>
@@ -166,8 +162,8 @@ login();
 			// Merci à http://forum.phpfrance.com/
 			else{
 				$qry = 'SELECT MAX(date) AS date FROM watussi_kpi;';
-				$res = mysql_query($qry);
-				$row = mysql_fetch_object($res);
+				$res = $dbh->query($qry);
+				$row = $res->fetch(PDO::FETCH_OBJ);
 				$date = $row->date;				
 				
 				$jour = substr($date, 8, 2);
@@ -205,8 +201,8 @@ login();
 		
 		<?php
 			$qry = "SELECT * FROM watussi_kpi ORDER BY kpi_id DESC LIMIT 1;";
-			$res = mysql_query($qry);
-			$row = mysql_fetch_object($res);
+			$res = $dbh->query($qry);
+			$row = $res->fetch(PDO::FETCH_OBJ);
 			
 			$nb_urls = $row->nb_urls;
 			$nb_crawl_30j = $row->nb_crawl_30j;
@@ -295,4 +291,4 @@ login();
 </body>
 </html>
 
-<?php mysql_close($link); ?>
+<?php $dbh = null; ?>

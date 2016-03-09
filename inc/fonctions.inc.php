@@ -128,11 +128,9 @@ function add_log($adresse_ip, $referer, $user_agent, $url, $res_code=200, $respo
 			}
 			
 			$heure = date('G');
-			
 			$qry = "INSERT INTO watussi_log(url_id, type_id, date_id, heure, res_code, response_time, keyword_id)
-					VALUES('$url_id', '$type_id', '$date_id', '$heure', '$res_code', '$response_time', '$keyword_id');";
-					
-			mysql_query($qry);
+					VALUES('$url_id', '$type_id', '$date_id', '$heure', '$res_code', '$response_time', $keyword_id);";	
+			$dbh->query($qry);
 			
 			return(0);
 }
@@ -141,17 +139,17 @@ function get_date_id(){
 	$today = date("Y-m-d");
 	
 	$qry = "SELECT date_id FROM watussi_date WHERE date = '$today'";
-	$res = mysql_query($qry);
+	$res = $dbh->query($qry);
 	
 	$nb = mysql_num_rows($res);
 	
 	if($nb == 0){
-		$qry = "INSERT INTO watussi_date(date_id, date) VALUES('', '$today')";
-		mysql_query($qry);
-		$date_id = mysql_insert_id();
+		$qry = "INSERT INTO watussi_date(date_id, date) VALUES(NULL, '$today')";
+		$dbh->query($qry);
+		$date_id = $dbh->lastInsertId();
 	}
 	else{
-		$row = mysql_fetch_object($res);
+		$row = $dbh->lastInsertId($res);
 		$date_id = $row->date_id;
 	}
 	
@@ -171,8 +169,8 @@ function get_url_id($url, $type_id, $date_id, $res_code){
 	}
 	
 	
-	mysql_query($qry);
-	$nb = mysql_affected_rows();
+	$dbh->query($qry);
+	$nb = $dbh->rowCount();
 	
 	
 	if($nb > 0){		
@@ -180,19 +178,19 @@ function get_url_id($url, $type_id, $date_id, $res_code){
 		// On regarde si c'est son premier crawl
 		if($type_id == 0){
 			$qry = "SELECT first_crawl FROM watussi_url WHERE url_md5 = '$url_md5';";
-			$res = mysql_query($qry);
-			$row = mysql_fetch_object($res);
+			$res = $dbh->query($qry);
+			$row = $dbh->lastInsertId($res);
 			$first_crawl = $row->first_crawl;
 			
 			if($first_crawl == 0){
 				$qry = "UPDATE watussi_url SET first_crawl = '$date_id' WHERE url_md5 = '$url_md5';";
-				mysql_query($qry);
+				$dbh->query($qry);
 			}
 		}
 		
 		$qry = "SELECT url_id FROM watussi_url WHERE url_md5 = '$url_md5';";
-		$res = mysql_query($qry);
-		$row = mysql_fetch_object($res);
+		$res = $dbh->query($qry);
+		$row = $dbh->lastInsertId($res);
 		$url_id = $row->url_id;
 	}
 	
@@ -212,10 +210,10 @@ function get_url_id($url, $type_id, $date_id, $res_code){
 		}		
 				
 		$qry = "INSERT INTO watussi_url(url_id, url, url_md5, first_crawl, last_crawl, nb_crawl, nb_visites, last_res_code, cat_id, active)
-				VALUES('', '$url', '$url_md5', '$first_crawl', '$last_crawl', '$nb_crawl', '$nb_visites', '$res_code', 0, $active);";
+				VALUES(NULL, '$url', '$url_md5', '$first_crawl', '$last_crawl', '$nb_crawl', '$nb_visites', '$res_code', 0, $active);";
 		
-		$res = mysql_query($qry);
-		$url_id = mysql_insert_id();
+		$res = $dbh->query($qry);
+		$url_id = $dbh->lastInsertId();
 		
 		
 	}
@@ -227,23 +225,23 @@ function get_keyword_id($keyword){
 	$keyword_md5 = md5($keyword);
 	
 	$qry = "UPDATE watussi_keywords SET nb_visites = nb_visites + 1 WHERE keyword_md5 = '$keyword_md5';";
-	$res = mysql_query($qry);
+	$res = $dbh->query($qry);
 	
-	$nb = mysql_affected_rows();
+	$nb = $dbh->rowCount();
 	
 	if($nb > 0){
 		$qry = "SELECT keyword_id FROM watussi_keywords WHERE keyword_md5 = '$keyword_md5';";
-		$res = mysql_query($qry);
-		$row = mysql_fetch_object($res);
+		$res = $dbh->query($qry);
+		$row = $dbh->lastInsertId($res);
 		$keyword_id = $row->keyword_id;
 	}
 	else{
 		$tmp = explode(' ', $keyword);
 		$nb_term = count($tmp);
 		$qry = "INSERT INTO watussi_keywords(keyword_id, keyword_md5, keyword, nb_term, nb_visites)
-				VALUES('', '$keyword_md5', '$keyword', '$nb_term', 1);";
-		$res = mysql_query($qry);
-		$keyword_id = mysql_insert_id();
+				VALUES(NULL, '$keyword_md5', '$keyword', '$nb_term', 1);";
+		$res = $dbh->query($qry);
+		$keyword_id = $dbh->lastInsertId();
 	}
 	
 	return($keyword_id);

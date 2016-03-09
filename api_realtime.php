@@ -39,15 +39,12 @@ set_time_limit(0);
 
 $timestart = microtime(true);
 
-include_once('inc/config.inc.php');
+include_once('inc/connect.inc.php');
 include_once('inc/fonctions.inc.php');
 
 login();
 
 $mode = $_GET['mode'];
-
-$link = mysql_connect($CONFIG_TAB['host'], $CONFIG_TAB['login_db'], $CONFIG_TAB['password_db']);
-mysql_select_db($CONFIG_TAB['database']);
 
 // Nb pages cralwlées dans 60 dernières secondes
 if($mode == 2){
@@ -58,8 +55,8 @@ if($mode == 2){
 	$x = time() * 1000;	
 	
 	$qry = 'SELECT COUNT(*) AS nb FROM watussi_log WHERE date >= NOW() - INTERVAL 60 SECOND AND type_id = 0;';
-	$res = mysql_query($qry);
-	$row = mysql_fetch_object($res);
+	$res = $dbh->query($qry);
+	$row = $res->fetch(PDO::FETCH_OBJ);
 	$y = intval($row->nb);
 	
 	// The y value is a random number
@@ -69,7 +66,7 @@ if($mode == 2){
 	// Create a PHP array and echo it as JSON
 	$ret = array($x, $y);
 	echo json_encode($ret);
-	mysql_close($link);
+	$dbh = null;
 	exit();
 }
 
@@ -82,8 +79,8 @@ if($mode == 3){
 	$x = time() * 1000;	
 	
 	$qry = 'SELECT COUNT(*) AS nb FROM watussi_log WHERE date >= NOW() - INTERVAL 60 SECOND AND type_id = 1;';
-	$res = mysql_query($qry);
-	$row = mysql_fetch_object($res);
+	$res = $dbh->query($qry);
+	$row = $res->fetch(PDO::FETCH_OBJ);
 	$y = intval($row->nb);
 	
 	// The y value is a random number
@@ -93,7 +90,7 @@ if($mode == 3){
 	// Create a PHP array and echo it as JSON
 	$ret = array($x, $y);
 	echo json_encode($ret);
-	mysql_close($link);
+	$dbh = null;
 	exit();
 }
 
@@ -162,10 +159,10 @@ if($mode == 3){
 // Dernières pages crawlées
 if($mode == 0){
 	$qry = 'SELECT url, res_code, date, response_time FROM watussi_log, watussi_url WHERE type_id = 0 AND watussi_url.url_id = watussi_log.url_id ORDER BY date DESC LIMIT 20;';
-	$res = mysql_query($qry);
+	$res = $dbh->query($qry);
 	echo "<table id='beautiful-tab'>";
 	echo "<thead></thead><tr><th>URL</th><th>Res Code</th><th>Response Time</th><th>Date</th></tr></thead>";
-	while($row = mysql_fetch_object($res)){
+	while($row = $res->fetch(PDO::FETCH_OBJ)){
 		$url = $row->url;
 		$res_code = $row->res_code;
 		$date = $row->date;
@@ -186,10 +183,10 @@ if($mode == 1){
 			AND watussi_log.keyword_id = watussi_keywords.keyword_id
 			ORDER BY date 
 			DESC LIMIT 20;';
-	$res = mysql_query($qry);
+	$res = $dbh->query($qry);
 	echo "<table id='beautiful-tab'>";
 	echo "<thead></thead><tr><th>URL</th><th>Keyword</th><th>Res Code</th><th>Response Time</th><th>Date</th></tr></thead>";
-	while($row = mysql_fetch_object($res)){
+	while($row = $res->fetch(PDO::FETCH_OBJ)){
 		$url = $row->url;
 		$res_code = $row->res_code;
 		$date = $row->date;
@@ -206,7 +203,7 @@ if($mode == 1){
 
 
 
-mysql_close($link);
+$dbh = null;
 
 ?>
 

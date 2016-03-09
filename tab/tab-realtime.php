@@ -36,15 +36,11 @@
 */
 
 
-include_once('../inc/config.inc.php');
+include_once('../inc/connect.inc.php');
 include_once('../inc/fonctions.inc.php');
 include_once('../inc/graph.inc.php');
 
 login();
-
-$link = mysql_connect($CONFIG_TAB['host'], $CONFIG_TAB['login_db'], $CONFIG_TAB['password_db']);
-mysql_select_db($CONFIG_TAB['database']);
-
 ?>
 
 
@@ -209,4 +205,4 @@ mysql_select_db($CONFIG_TAB['database']);
 
 </html>
 
-<?php mysql_close($link); ?>
+<?php $dbh = null; ?>
