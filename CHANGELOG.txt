@@ -1,0 +1,19 @@
+========= v0.4 - 6 octobre 2013 ========
+
+Modification d'une regex pour mieux gérer le not_provided
+
+
+========= v0.3 - 25 mai 2013 ========
+
+Affichage du response_time dans l'onglet real time
+
+
+======== v0.2 - 8 décembre 2012 ========
+
+Correction de petits bugs
+Simplification de la création des tables en base de données
+Ajout de tableaux pour voir les dernières URLs en erreur et dernières URLs découvertes par Google
+
+======== v0.1 - 4 décembre 2012 ========
+
+Initialisation du projet, ouverture à quelques testeurs

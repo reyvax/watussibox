@@ -1,0 +1,53 @@
+<?php
+
+/* config.inc.php
+ * Première version : 25 novembre 2012
+ * Dernière modification : 4 décembre 2012
+.---------------------------------------------------------------------------.
+|  Software: WatussiBox Free                                                |
+|   Version: 0.1                                                            |
+|   Contact: jbenoit.moingt@gmail.com                                       |
+|      Info: http://www.watussi.fr                                          |
+|   Support: http://www.watussi.fr                                          |
+| ------------------------------------------------------------------------- |
+|    Author: Jean-Benoît MOINGT                                             |
+| ------------------------------------------------------------------------- |
+|   License: Distributed under the Creative Commons license (BY-NC-SA )     |
+|            http://creativecommons.org/licenses/by-nc-sa/3.0/              | 
+|                                                                           |
+| This program is distributed in the hope that it will be useful - WITHOUT  |
+| ANY WARRANTY.                                                             |
+| ------------------------------------------------------------------------- |
+|   Licence: Distribué sous licence Creative Commons (BY-NC-SA)             |
+|            http://creativecommons.org/licenses/by-nc-sa/3.0/fr/           |
+|                                                                           |
+| Ce programme est distribué dans l'espoir qu'il sera utile - SANS AUCUNE   |
+| GARANTIE.                                                                 |
+| ------------------------------------------------------------------------- |
+| Nous offrons un certain nombre de services complémentaire :               |
+| - Versions enrichies en fonctionnalitées                                  |
+| - Support                                                                 |
+| - Formation                                                               |
+| - Conseil                                                                 |
+| - Développements spécifiques                                              |
+| --> Contactez-nous : jbenoit.moingt@gmail.com                             |
+'---------------------------------------------------------------------------'
+
+*/
+
+$CONFIG_TAB = array(
+
+	// Accès base de données
+	'host'				=>			'',
+	'database'			=>			'',
+	'login_db'			=>			'',
+	'password_db'		=>			'',
+	
+	// Utilisateurs, vous pouvez en ajouter autant que nécessaire
+	'users'				=>			array(
+										'admin'				=>		'password',
+										'admin2'			=>		'password2',
+									)
+
+);
+
