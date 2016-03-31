@@ -90,7 +90,7 @@ function get_ecart($date){
 
 
 function add_log($adresse_ip, $referer, $user_agent, $url, $res_code=200, $response_time=0){
-			
+	global $dbh;
 			// On regarde si il s'agit de Googlebot (contrôle user_agent + IP)
 			if(strstr($user_agent,'Googlebot/2.1') && strstr($adresse_ip, '66.249')){
 				$type_id = 0;
@@ -136,20 +136,20 @@ function add_log($adresse_ip, $referer, $user_agent, $url, $res_code=200, $respo
 }
 
 function get_date_id(){
+	global $dbh;
 	$today = date("Y-m-d");
 	
 	$qry = "SELECT date_id FROM watussi_date WHERE date = '$today'";
 	$res = $dbh->query($qry);
+	$nb = $res->rowCount();
 	
-	$nb = mysql_num_rows($res);
-	
-	if($nb == 0){
+	if($nb < 1){
 		$qry = "INSERT INTO watussi_date(date_id, date) VALUES(NULL, '$today')";
 		$dbh->query($qry);
 		$date_id = $dbh->lastInsertId();
 	}
 	else{
-		$row = $dbh->lastInsertId($res);
+		$row = $res->fetchObject();
 		$date_id = $row->date_id;
 	}
 	
@@ -157,6 +157,7 @@ function get_date_id(){
 }
 
 function get_url_id($url, $type_id, $date_id, $res_code){
+	global $dbh;
 	$url_md5 = md5($url);
 	
 	// On regarde si l'URL existe deja
@@ -169,19 +170,19 @@ function get_url_id($url, $type_id, $date_id, $res_code){
 	}
 	
 	
-	$dbh->query($qry);
-	$nb = $dbh->rowCount();
+	$update = $dbh->prepare($qry);
+	$update->execute();
+	$nb = $update->rowCount();
 	
 	
 	if($nb > 0){		
 		
 		// On regarde si c'est son premier crawl
 		if($type_id == 0){
-			$qry = "SELECT first_crawl FROM watussi_url WHERE url_md5 = '$url_md5';";
-			$res = $dbh->query($qry);
-			$row = $dbh->lastInsertId($res);
+			$sql = "SELECT first_crawl FROM watussi_url WHERE url_md5 = '$url_md5';";
+			$query = $dbh->query($sql);
+			$row = $query->fetchObject();
 			$first_crawl = $row->first_crawl;
-			
 			if($first_crawl == 0){
 				$qry = "UPDATE watussi_url SET first_crawl = '$date_id' WHERE url_md5 = '$url_md5';";
 				$dbh->query($qry);
@@ -190,7 +191,7 @@ function get_url_id($url, $type_id, $date_id, $res_code){
 		
 		$qry = "SELECT url_id FROM watussi_url WHERE url_md5 = '$url_md5';";
 		$res = $dbh->query($qry);
-		$row = $dbh->lastInsertId($res);
+		$row = $res->fetchObject();
 		$url_id = $row->url_id;
 	}
 	
@@ -211,17 +212,14 @@ function get_url_id($url, $type_id, $date_id, $res_code){
 				
 		$qry = "INSERT INTO watussi_url(url_id, url, url_md5, first_crawl, last_crawl, nb_crawl, nb_visites, last_res_code, cat_id, active)
 				VALUES(NULL, '$url', '$url_md5', '$first_crawl', '$last_crawl', '$nb_crawl', '$nb_visites', '$res_code', 0, $active);";
-		
-		$res = $dbh->query($qry);
+		$dbh->query($qry);
 		$url_id = $dbh->lastInsertId();
-		
-		
 	}
-	
 	return($url_id);
 }
 
 function get_keyword_id($keyword){
+	global $dbh;
 	$keyword_md5 = md5($keyword);
 	
 	$qry = "UPDATE watussi_keywords SET nb_visites = nb_visites + 1 WHERE keyword_md5 = '$keyword_md5';";
