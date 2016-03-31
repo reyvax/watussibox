@@ -36,12 +36,10 @@
 */
 
 
-include_once('inc/config.inc.php');
+include_once('inc/connect.inc.php');
 include_once('inc/fonctions.inc.php');
 
 
-$link = mysql_connect($CONFIG_TAB['host'], $CONFIG_TAB['login_db'], $CONFIG_TAB['password_db']);
-mysql_select_db($CONFIG_TAB['database']);
 
 $adresse_ip = $_SERVER['REMOTE_ADDR'];
 
@@ -63,6 +61,4 @@ $url = dirname(strtolower($_SERVER['SERVER_PROTOCOL'])) . "://" . $_SERVER['HTTP
 
 add_log($adresse_ip, $referer, $user_agent, $url, $RES_CODE, $RESPONSE_TIME);
 
-
-
-mysql_close($link);
+$dbh = null;
